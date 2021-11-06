@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
+from .forms import LibroForm
 from .models import Libro
 
 # Create your views here.
@@ -15,7 +16,21 @@ def libros(request):
     return render(request, 'libros/index.html', {'libros': libros})
 
 def crear_libro(request):
-    return render(request, 'libros/crear.html')
+    formulario = LibroForm(request.POST or None, request.FILES or None)
+    if formulario.is_valid():
+        formulario.save()
+        return redirect('libros')
+    return render(request, 'libros/crear.html',{'formulario': formulario})
 
-def editar_libro(request):
-    return render(request, 'libros/editar.html')
+def editar_libro(request,id):
+    libro = Libro.objects.get(id=id)
+    formulario = LibroForm(request.POST or None, request.FILES or None, instance=libro)
+    if formulario.is_valid() and request.POST:
+        formulario.save()
+        return redirect('libros')
+    return render(request, 'libros/editar.html',{'formulario': formulario})
+
+def eliminar_libro(request, id):
+    libro = Libro.objects.get(id=id)
+    libro.delete()
+    return redirect('libros')

@@ -1,6 +1,16 @@
-<form action="post" enctype="multipart/form-data">
-    <div class="mb-3">
-      <label for="" class="form-label">Nombre:</label>
-      <input type="text" class="form-control" name="" id="" aria-describedby="helpId" placeholder="Nombre">
-    </div>
+<form enctype="multipart/form-data" method="post">
+    {% csrf_token %}
+    {% for campo in formulario %}
+      <div class="mb-3">
+        <label for="" class="form-label">{{ campo.label }}:</label>
+        {% if campo.field.widget.input_type == 'file' and campo.value %}
+          <br />
+          <img src="{{ MEDIA_URL }}/imagenes/{{campo.value}}"  width="100" alt="{{ campo.label }}">
+        {% endif %}
+          
+        <input type="{{ campo.field.widget.input_type }}" class="form-control" name="{{ campo.name }}" id="{{ campo.name }}" value="{{ campo.value | default:'' }}" placeholder="{{ campo.label }}" aria-describedby="helpId">
+      </div>
+      <div class="col-12 help-text">{{ campo.errors }}</div>
+    {% endfor %}
+    <input name="" id="" class="btn btn-success" type="submit" value="Enviar Información">
 </form>

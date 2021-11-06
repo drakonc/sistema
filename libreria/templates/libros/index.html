@@ -28,9 +28,9 @@
                         </td>
                        <td>{{ libro.descripcion }}</td>
                        <td> 
-                           <a name="edit" id="edit" class="btn btn-info text-white" href="{% url 'editar_libro' %}" role="button">Editar</a>
+                           <a name="edit" id="edit" class="btn btn-info text-white" href="{% url 'editar_libro' libro.id %}" role="button">Editar</a>
                            |
-                           <a name="borrar" id="borrar" class="btn btn-danger" href="#" role="button">Borrar</a>
+                           <a name="borrar" id="borrar" class="btn btn-danger" href="{% url 'eliminar_libro' libro.id %}" role="button">Borrar</a>
                        </td>
                    </tr>
                     {% endfor %}
